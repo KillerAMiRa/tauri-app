@@ -1,18 +1,18 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "s",
+  "productName": "timerCar",
   "version": "0.1.0",
   "identifier": "com.chens.s",
   "build": {
     "beforeDevCommand": "pnpm dev",
     "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "pnpm build",
+    "beforeBuildCommand": "",
     "frontendDist": "../dist"
   },
   "app": {
     "windows": [
       {
-        "title": "s",
+        "title": "timerCar",
         "width": 800,
         "height": 600
       }
