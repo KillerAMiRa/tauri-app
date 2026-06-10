@@ -1,6 +1,6 @@
 use tauri::Manager;
 use std::time::Duration;
-use log::info;
+// use log::info;
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
@@ -8,50 +8,61 @@ fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
-use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::atomic::{AtomicBool, Ordering};
 
-static WINDOW_COUNTER: AtomicUsize = AtomicUsize::new(1);
+static IS_MAIN_ACTIVE: AtomicBool = AtomicBool::new(true);
 
-#[tauri::command]
-fn frontend_ready(window: tauri::WebviewWindow, app: tauri::AppHandle) {
-    println!("前端已就绪，当前窗口: {}", window.label());
-    
-    // 显示当前准备好的窗口
-    if let Err(e) = window.show() {
-        println!("显示窗口失败: {}", e);
-    }
-    
-    // 销毁其他所有旧窗口，彻底释放内存
-    let current_label = window.label();
-    for (label, w) in app.webview_windows() {
-        if label != current_label {
-            println!("正在销毁旧窗口: {} 释放内存...", label);
-            w.close().unwrap();
-        }
-    }
-}
+// frontend_ready command removed
 
 fn start_auto_reload(app_handle: tauri::AppHandle) {
+    // 启动时创建一个常驻的副窗口，且默认隐藏
+    if let Err(e) = tauri::WebviewWindowBuilder::new(
+        &app_handle,
+        "secondary",
+        tauri::WebviewUrl::App(Default::default())
+    )
+    .visible(false)
+    .build() {
+        println!("创建副窗口失败: {}", e);
+        return;
+    }
+
     tauri::async_runtime::spawn(async move {
         loop {
-            tokio::time::sleep(Duration::from_secs(5)).await;
+            tokio::time::sleep(Duration::from_secs(10)).await;
             
-            let count = WINDOW_COUNTER.fetch_add(1, Ordering::SeqCst);
-            let new_label = format!("main_{}", count);
-            println!("后台定时器被触发，正在静默创建新窗口: {} ...", new_label);
+            let is_main = IS_MAIN_ACTIVE.load(Ordering::SeqCst);
             
-            // 创建一个隐藏的新窗口
-            let builder = tauri::WebviewWindowBuilder::new(
-                &app_handle,
-                &new_label,
-                tauri::WebviewUrl::App(Default::default())
-            )
-            .visible(false); // 隐藏窗口，做到无感加载
-            
-            if let Err(e) = builder.build() {
-                println!("创建新窗口失败: {}", e);
-            } else {
-                println!("新窗口 {} 正在后台加载...", new_label);
+            if let (Some(main_win), Some(sec_win)) = (
+                app_handle.get_webview_window("main"),
+                app_handle.get_webview_window("secondary")
+            ) {
+                if is_main {
+                    // 当前是 main，准备后台刷新 secondary
+                    println!("后台正在静默刷新 secondary 窗口...");
+                    let _ = sec_win.eval("window.location.reload();");
+                    
+                    // 给足 2 秒加载时间
+                    tokio::time::sleep(Duration::from_secs(5)).await;
+                    
+                    println!("平滑切换：显示 secondary，隐藏 main");
+                    let _ = sec_win.show();
+                    let _ = main_win.hide();
+                    
+                    IS_MAIN_ACTIVE.store(false, Ordering::SeqCst);
+                } else {
+                    // 当前是 secondary，准备后台刷新 main
+                    println!("后台正在静默刷新 main 窗口...");
+                    let _ = main_win.eval("window.location.reload();");
+                    
+                    tokio::time::sleep(Duration::from_secs(5)).await;
+                    
+                    println!("平滑切换：显示 main，隐藏 secondary");
+                    let _ = main_win.show();
+                    let _ = sec_win.hide();
+                    
+                    IS_MAIN_ACTIVE.store(true, Ordering::SeqCst);
+                }
             }
         }
     });
@@ -67,7 +78,7 @@ pub fn run() {
             start_auto_reload(app_handle);
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![greet, frontend_ready])
+        .invoke_handler(tauri::generate_handler![greet])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

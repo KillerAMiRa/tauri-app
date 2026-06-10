@@ -18,14 +18,20 @@ export default defineConfig(async () => ({
     host: host || false,
     hmr: host
       ? {
-          protocol: "ws",
-          host,
-          port: 1421,
-        }
+        protocol: "ws",
+        host,
+        port: 1421,
+      }
       : undefined,
     watch: {
       // 3. tell Vite to ignore watching `src-tauri`
       ignored: ["**/src-tauri/**"],
     },
   },
+  preview: {
+    port: 1420, // 自定义预览端口
+    host: '0.0.0.0',
+    // strictPort: true, // 若端口被占用则直接退出
+    // open: true // 自动打开浏览器
+  }
 }));
