@@ -30,7 +30,7 @@ export default defineConfig(async () => ({
   },
   preview: {
     port: 1420, // 自定义预览端口
-    host: '0.0.0.0',
+    host: host,
     // strictPort: true, // 若端口被占用则直接退出
     // open: true // 自动打开浏览器
   }
