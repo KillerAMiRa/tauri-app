@@ -29,7 +29,7 @@ fn start_auto_reload(app_handle: tauri::AppHandle) {
 
     tauri::async_runtime::spawn(async move {
         loop {
-            tokio::time::sleep(Duration::from_secs(10)).await;
+            tokio::time::sleep(Duration::from_secs(60 * 60 * 3)).await;
             
             let is_main = IS_MAIN_ACTIVE.load(Ordering::SeqCst);
             
