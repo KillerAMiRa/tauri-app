@@ -8,6 +8,12 @@ fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
+#[tauri::command]
+fn trigger_bugly_crash() {
+    println!("触发 Bugly 原生崩溃测试...");
+    panic!("This is a deliberate test panic to verify Bugly NDK crash reporting!");
+}
+
 use std::sync::atomic::{AtomicBool, Ordering};
 
 static IS_MAIN_ACTIVE: AtomicBool = AtomicBool::new(true);
@@ -78,7 +84,7 @@ pub fn run() {
             start_auto_reload(app_handle);
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![greet, trigger_bugly_crash])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

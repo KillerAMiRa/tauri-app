@@ -9,6 +9,10 @@ async function greet() {
   // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
   greetMsg.value = await invoke("greet", { name: name.value });
 }
+
+async function testBugly() {
+  await invoke("trigger_bugly_crash");
+}
 </script>
 
 <template>
@@ -33,6 +37,12 @@ async function greet() {
       <button type="submit">Greet</button>
     </form>
     <p>{{ greetMsg }}</p>
+
+    <div class="row" style="margin-top: 2em;">
+      <button type="button" @click="testBugly" style="background-color: #ff4a4a; color: white; border-color: transparent;">
+        💥 触发 Bugly 崩溃测试
+      </button>
+    </div>
   </main>
 </template>
 
