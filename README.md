@@ -8,3 +8,4 @@ This template should help get you started developing with Tauri + Vue 3 in Vite.
 
 https://v2.tauri.app/zh-cn/distribute/sign/android/
 https://tool.lvtao.net/keystore
+pnpm tauri icon
