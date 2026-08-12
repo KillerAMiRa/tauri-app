@@ -6,10 +6,13 @@ This template should help get you started developing with Tauri + Vue 3 in Vite.
 
 - [VS Code](https://code.visualstudio.com/) + [Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
 
-https://v2.tauri.app/zh-cn/distribute/sign/android/
-https://tool.lvtao.net/keystore
+[text](https://v2.tauri.app/zh-cn/distribute/sign/android/)
+[签名](https://tool.lvtao.net/keystore)
+[分析](https://tool.tds.qq.com/apk-analyzer)
 ```
 pnpm tauri icon
 pnpm tauri android build
 pnpm tauri android dev
+pnpm tauri android init
 ```
+Lumina_t_s

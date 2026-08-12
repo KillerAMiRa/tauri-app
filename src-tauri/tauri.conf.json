@@ -1,8 +1,9 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "timerCar",
+  "productName": "Lumina_t",
+  "mainBinaryName": "Lumina_t",
   "version": "0.1.0",
-  "identifier": "com.chens.s",
+  "identifier": "com.chens.lumina-t",
   "build": {
     "beforeDevCommand": "",
     "devUrl": "https://baidu.com",
