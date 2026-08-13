@@ -19,3 +19,4 @@ pnpm tauri android dev
 pnpm tauri android init
 ```
 Lumina_t_s
+http manifestPlaceholders["usesCleartextTraffic"] = "true"

@@ -18,7 +18,7 @@ android {
     compileSdk = 36
     namespace = "com.chens.lumina_t"
     defaultConfig {
-        manifestPlaceholders["usesCleartextTraffic"] = "false"
+        manifestPlaceholders["usesCleartextTraffic"] = "true"
         applicationId = "com.chens.lumina_t"
         minSdk = 24
         targetSdk = 36

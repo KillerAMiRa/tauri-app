@@ -2,5 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.lumina_t" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
+        <!-- 👈 增加这一行：将原生启动背景改为深色/纯黑，防止闪白屏 -->
+        <item name="android:windowBackground">#121212</item>
     </style>
 </resources>
