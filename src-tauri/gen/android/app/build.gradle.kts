@@ -19,7 +19,15 @@ android {
     namespace = "com.chens.lumina_t"
     defaultConfig {
         manifestPlaceholders["usesCleartextTraffic"] = "true"
-        applicationId = "com.chens.lumina_t"
+
+        // 优先从环境变量或 Gradle 属性读取包名
+        val customAppId = System.getenv("CUSTOM_APP_ID") ?: project.findProperty("CUSTOM_APP_ID") as String?
+        applicationId = customAppId ?: "com.chens.lumina_t"
+
+        // 优先从环境变量读取应用名，若未设置则默认兜底为 Lumina_t
+        val customAppName = System.getenv("CUSTOM_APP_NAME") ?: (project.findProperty("CUSTOM_APP_NAME") as String?) ?: "Lumina_t"
+        manifestPlaceholders["appName"] = customAppName
+
         minSdk = 24
         targetSdk = 36
         versionCode = tauriProperties.getProperty("tauri.android.versionCode", "1").toInt()

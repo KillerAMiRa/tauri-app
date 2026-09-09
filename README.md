@@ -14,7 +14,8 @@ This template should help get you started developing with Tauri + Vue 3 in Vite.
 [分析](https://tool.tds.qq.com/apk-analyzer)
 ```
 pnpm tauri icon
-pnpm tauri android build
+pnpm tauri android build 打默认包（包名：com.chens.lumina_t，名字：Lumina_t）
+$env:CUSTOM_APP_ID="com.chens.lumina.ranking"; $env:CUSTOM_APP_NAME="ranking_L"; pnpm tauri android build
 pnpm tauri android dev
 pnpm tauri android init
 ```
